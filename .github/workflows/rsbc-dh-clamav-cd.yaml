@@ -20,6 +20,6 @@ jobs:
     uses: ./.github/workflows/cd-workflow.yml
     with:
       DOCKER_CONTEXT: Java
-      DOCKER_FILE: Java/Dockerfile
+      DOCKER_FILE: Java/clamav_client/Dockerfile
       DOCKER_IMAGE_NAME: rsbc-dh-clamav-client
     secrets: inherit

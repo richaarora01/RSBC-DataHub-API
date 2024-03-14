@@ -1,50 +1,54 @@
 FROM node:18-alpine AS base
 RUN apk add --no-cache g++ make py3-pip libc6-compat
 WORKDIR /app
+RUN ls -ltr
 COPY package*.json ./
+RUN ls -ltr
 EXPOSE 3000
 
 FROM base AS builder
 WORKDIR /app
+RUN ls -ltr
 COPY . .
-RUN npm run build
+RUN ls -ltr
+#RUN npm run build
 
-FROM base AS production
-WORKDIR /app
+#FROM base AS production
+#WORKDIR /app
 
 # ENV NODE_ENV production
-RUN npm ci --ignore-scripts
+#RUN npm ci --ignore-scripts
 
-RUN addgroup -g 1003 -S nodegroup
-RUN adduser -S nextuser -u 1003
-USER nextuser
+#RUN addgroup -g 1003 -S nodegroup
+#RUN adduser -S nextuser -u 1003
+#USER nextuser
 
-COPY --from=builder /app/.next ./.next
-RUN chown nextuser:nodegroup ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/public ./public
+#COPY --from=builder /app/.next ./.next
+#RUN chown nextuser:nodegroup ./.next
+#COPY --from=builder /app/node_modules ./node_modules
+#COPY --from=builder /app/package.json ./package.json
+#COPY --from=builder /app/public ./public
 
-CMD npm start
+#CMD npm start
 
-FROM base AS dev
-RUN npm install 
+#FROM base AS dev
+#RUN npm install
 
-COPY package.json .
-COPY package-lock.json .
-COPY /node_modules ./node_modules
-COPY /src ./src
-COPY /public ./public
-COPY next.config.mjs .
-COPY next-env.d.ts .
-COPY tsconfig.json .
-COPY .eslintrc.json .
+#COPY package.json .
+#COPY package-lock.json .
+#COPY /node_modules ./node_modules
+#COPY /src ./src
+#COPY /public ./public
+#COPY next.config.mjs .
+#COPY next-env.d.ts .
+#COPY tsconfig.json .
+#COPY .eslintrc.json .
 
-RUN addgroup -g 1003 -S nodegroup
-RUN adduser -S nextuser -u 1003
+#RUN addgroup -g 1003 -S nodegroup
+#RUN adduser -S nextuser -u 1003
 
-RUN chown -R nextuser:nodegroup /app
+#RUN chown -R nextuser:nodegroup /app
 
-USER nextuser
+#USER nextuser
 
-CMD npm run dev
+#CMD npm run dev

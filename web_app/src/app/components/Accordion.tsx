@@ -10,62 +10,65 @@ import  React, { useState, ReactNode } from 'react';
 type CustomAccordionProps = {
     title: string;
     content: ReactNode;
+    id: string;
+    isExpanded: boolean;
 }
 
-const CustomAccordion: React.FC<CustomAccordionProps> = ({ title, content }) => {
+
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+    <MUIAccordionSummary
+        expandIcon={<KeyboardArrowRight sx={{ fontSize: '30px' }} />}
+        {...props}
+    />
+))(({ theme }) => ({
+    flexDirection: 'row-reverse',
+    '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+        transform: 'rotate(90deg)',
+    },
+    '.MuiAccordionSummary-root': {
+        padding: '0px 10px',
+    },
+    '.MuiAccordionSummary-content': {
+        margin: '0px',
+    },
+    '.MuiAccordion-root': {
+        paddingBottom: '20px',
+        display: 'table-cell',
+    },
+    '.MuiBox-root': {
+        display: 'table-cell',
+    }
+
+
+}));
+
+const AccordionDetails = styled(MUIAccordionDetails)(({ theme }) => ({
+    borderTop: '0px solid rgba(0, 0, 0, .125)',
+}));
+
+const Accordion = styled((props: AccordionProps) => (
+    <MUIAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+    '&:not(:last-child)': {
+        borderBottom: 0,
+        margin: '0px',
+        fontSize: '30px',
+    },
+    '&::before': {
+        display: 'none',
+    },
+}));
+
+const CustomAccordion: React.FC<CustomAccordionProps> = ({ title, content, id, isExpanded, }) => {
 
     const [expanded, setExpanded] = useState<string | false>(false);
 
     const toggleAccordion = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded : boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
-
-    const Accordion = styled((props: AccordionProps) => (
-        <MUIAccordion disableGutters elevation={0} square {...props} />
-    ))(({ theme }) => ({
-        '&:not(:last-child)': {
-            borderBottom: 0,
-            margin: '0px',
-            fontSize: '30px',
-        },
-        '&::before': {
-            display: 'none',
-        },
-    }));
-
-    const AccordionSummary = styled((props: AccordionSummaryProps) => (
-        <MUIAccordionSummary
-            expandIcon={<KeyboardArrowRight sx={{ fontSize: '0.9rem' }} />}
-            {...props}
-        />
-    ))(({ theme }) => ({
-        flexDirection: 'row-reverse',          
-        '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-            transform: 'rotate(90deg)',
-        },
-        '.MuiAccordionSummary-root': {
-            padding: '0px 10px',
-        },
-        '.MuiAccordionSummary-content': {
-            margin: '0px',
-        },
-        '.MuiAccordion-root': {
-            paddingBottom: '20px',
-            display:'table-cell',
-        },
-        '.MuiBox-root': {
-            display: 'table-cell',
-        }
-              
-
-    }));
-
-    const AccordionDetails = styled(MUIAccordionDetails)(({ theme }) => ({
-        borderTop: '0px solid rgba(0, 0, 0, .125)',
-    }));
-
+    
     return (
-        <Accordion expanded={expanded === 'panel1'} onChange={toggleAccordion('panel1')} style={{paddingBottom:'10px'} }>
+        <Accordion expanded={isExpanded || expanded === 'panel1'} onChange = { toggleAccordion('panel1') } style = {{ paddingBottom: '10px' }} id = { id } >
             <AccordionSummary 
             expandIcon={< KeyboardArrowRight />}
             aria-controls="panel1-content"

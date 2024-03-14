@@ -11,8 +11,8 @@ WORKDIR /app
 RUN ls -ltr
 COPY . .
 RUN ls -ltr
-#RUN npm run build
-
+RUN npm run build
+RUN ls -ltr
 #FROM base AS production
 #WORKDIR /app
 
